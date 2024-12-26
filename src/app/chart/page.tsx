@@ -1,6 +1,6 @@
 "use client";
 
-import GanttChart from "@/app/chart/_components/gantt-chart";
+import GanttChart from "@/components/gantt-chart";
 
 const tasks = [
   {
