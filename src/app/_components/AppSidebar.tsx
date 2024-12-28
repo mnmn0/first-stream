@@ -10,6 +10,20 @@ import {Calendar, Inbox, Search, Settings, Home} from "lucide-react";
 import React, {useState} from "react";
 import {CreateProjectButton} from "@/app/_components/CreateProjectButton";
 import CreateProjectModal, {CreateProjectModalProps} from "@/app/_components/CreateProjectModal";
+import {NavigationTabs, TabItem} from "@/app/_components/NavigationTabs";
+
+const navigationTabs: TabItem[] = [
+  {
+    id: 'person',
+    label: 'Persons',
+    href: '/person'
+  },
+  {
+    id: 'projects',
+    label: 'Projects',
+    href: '/project'
+  }
+];
 
 const items = [
   {
@@ -53,8 +67,9 @@ const AppSidebar: React.FC = () => {
 
   return (
     <>
-      <Sidebar>
+      <Sidebar className="min-w-[240px]">
         <SidebarContent>
+          <NavigationTabs tabs={navigationTabs}/>
           <SidebarGroup>
             <SidebarGroupLabel>Application</SidebarGroupLabel>
             <SidebarGroupContent>
