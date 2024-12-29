@@ -16,40 +16,25 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Check, ChevronsUpDown, X } from 'lucide-react';
+import {Member} from "@/types/json/user/member";
+import {CreateProject} from "@/types/json/project/project";
+import useSWR from "swr";
+import {fetcher} from "@/lib/api/fetcher";
 
 interface CreateProjectModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-// サンプルユーザーデータ
-const members: Member[] = [
-  { id: 1, name: 'John Doe', email: 'john@example.com', avatar: '/avatar1.png' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com', avatar: '/avatar2.png' },
-  { id: 3, name: 'Bob Johnson', email: 'bob@example.com', avatar: '/avatar3.png' },
-];
-
-interface Member {
-  id: number;
-  name: string;
-  email: string;
-  avatar: string;
-}
-
-interface ProjectFormData {
-  name: string;
-  description: string;
-  members: Member[];
-  icon?: string;
-}
-
 const CreateProjectModal: React.FC<CreateProjectModalProps>  = ({ open, onOpenChange }: CreateProjectModalProps) => {
   const [memberSearchOpen, setMemberSearchOpen] = useState<boolean>(false);
   const [selectedMembers, setSelectedMembers] = useState<Member[]>([]);
-  const [formData, setFormData] = useState<Omit<ProjectFormData, 'members'>>({
+  const [formData, setFormData] = useState<Omit<CreateProject, 'members'>>({
     name: '',
     description: '',
   });
+
+  const { data, error } = useSWR('/api/user', fetcher)
 
   const toggleMember = (member: Member): void => {
     setSelectedMembers(current => {
