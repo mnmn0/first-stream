@@ -3,6 +3,6 @@ type Member = {
   name: string;
   email: string;
   avatar: string;
-}
+};
 
 export type { Member };

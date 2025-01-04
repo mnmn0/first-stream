@@ -1,5 +1,5 @@
-import AzureAD from "next-auth/providers/azure-ad";
-import NextAuth from "next-auth";
+import NextAuth from 'next-auth';
+import AzureAD from 'next-auth/providers/azure-ad';
 
 export const authOptions = {
   providers: [
@@ -7,7 +7,7 @@ export const authOptions = {
       clientId: process.env.ENTRA_ID_CLIENT_ID!,
       clientSecret: process.env.ENTRA_ID_CLIENT_SECRET!,
     }),
-  ]
-}
+  ],
+};
 
-export default NextAuth(authOptions)
+export default NextAuth(authOptions);

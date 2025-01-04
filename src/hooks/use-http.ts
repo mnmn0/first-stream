@@ -1,8 +1,8 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
-import useSWR, { SWRConfiguration } from 'swr';
+import axios, { type AxiosError, type AxiosResponse } from 'axios';
+import useSWR, { type SWRConfiguration } from 'swr';
 
 const api = axios.create({
-  baseURL: process.env.VITE_APP_API_ENDPOINT
+  baseURL: process.env.VITE_APP_API_ENDPOINT,
 });
 
 const fetcher = async (url: string) => {
@@ -11,11 +11,13 @@ const fetcher = async (url: string) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const fetchWithParams = async ([url, params]: [string, Record<string, any>]) => {
-  const res = await api
-    .get(url, {
-      params,
-    });
+const fetchWithParams = async ([url, params]: [
+  string,
+  Record<string, any>,
+]) => {
+  const res = await api.get(url, {
+    params,
+  });
   return res.data;
 };
 
@@ -37,7 +39,7 @@ const useHttp = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     get: <Data = any, Error = any>(
       url: string | [string, ...unknown[]] | null,
-      config?: SWRConfiguration
+      config?: SWRConfiguration,
     ) => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       return useSWR<Data, AxiosError<Error>>(
@@ -45,7 +47,7 @@ const useHttp = () => {
         typeof url === 'string' ? fetcher : fetchWithParams,
         {
           ...config,
-        }
+        },
       );
     },
 
@@ -54,17 +56,17 @@ const useHttp = () => {
       url: string,
       params?: DATA,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      errorProcess?: (err: any) => void
+      errorProcess?: (err: any) => void,
     ) => {
       return new Promise<AxiosResponse<RES>>((resolve, reject) => {
         api
           .get<RES, AxiosResponse<RES>, DATA>(url, {
             params,
           })
-          .then((data) => {
+          .then(data => {
             resolve(data);
           })
-          .catch((err) => {
+          .catch(err => {
             if (errorProcess) {
               errorProcess(err);
             } else {
@@ -87,15 +89,15 @@ const useHttp = () => {
       url: string,
       data: DATA,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      errorProcess?: (err: any) => void
+      errorProcess?: (err: any) => void,
     ) => {
       return new Promise<AxiosResponse<RES>>((resolve, reject) => {
         api
           .post<RES, AxiosResponse<RES>, DATA>(url, data)
-          .then((data) => {
+          .then(data => {
             resolve(data);
           })
-          .catch((err) => {
+          .catch(err => {
             if (errorProcess) {
               errorProcess(err);
             } else {
@@ -118,15 +120,15 @@ const useHttp = () => {
       url: string,
       data: DATA,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      errorProcess?: (err: any) => void
+      errorProcess?: (err: any) => void,
     ) => {
       return new Promise<AxiosResponse<RES>>((resolve, reject) => {
         api
           .put<RES, AxiosResponse<RES>, DATA>(url, data)
-          .then((data) => {
+          .then(data => {
             resolve(data);
           })
-          .catch((err) => {
+          .catch(err => {
             if (errorProcess) {
               errorProcess(err);
             } else {
@@ -148,17 +150,17 @@ const useHttp = () => {
       url: string,
       params?: DATA,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      errorProcess?: (err: any) => void
+      errorProcess?: (err: any) => void,
     ) => {
       return new Promise<AxiosResponse<RES>>((resolve, reject) => {
         api
           .delete<RES, AxiosResponse<RES>, DATA>(url, {
             params,
           })
-          .then((data) => {
+          .then(data => {
             resolve(data);
           })
-          .catch((err) => {
+          .catch(err => {
             if (errorProcess) {
               errorProcess(err);
             } else {
@@ -173,15 +175,15 @@ const useHttp = () => {
       url: string,
       data: DATA,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      errorProcess?: (err: any) => void
+      errorProcess?: (err: any) => void,
     ) => {
       return new Promise<AxiosResponse<RES>>((resolve, reject) => {
         api
           .patch<RES, AxiosResponse<RES>, DATA>(url, data)
-          .then((data) => {
+          .then(data => {
             resolve(data);
           })
-          .catch((err) => {
+          .catch(err => {
             if (errorProcess) {
               errorProcess(err);
             } else {

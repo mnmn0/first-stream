@@ -4,9 +4,9 @@ export type TabItem = {
   href: string;
 };
 
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface NavigationTabsProps {
   tabs: TabItem[];
@@ -17,11 +17,13 @@ export const NavigationTabs = ({ tabs, className }: NavigationTabsProps) => {
   const pathname = usePathname();
 
   return (
-    <nav className={cn(
-      'w-full grid grid-cols-2 rounded-lg gap-1 bg-gray-100 p-1',
-      className
-    )}>
-      {tabs.map((tab) => {
+    <nav
+      className={cn(
+        'w-full grid grid-cols-2 rounded-lg gap-1 bg-gray-100 p-1',
+        className,
+      )}
+    >
+      {tabs.map(tab => {
         const isActive = pathname === tab.href;
 
         return (
@@ -32,9 +34,7 @@ export const NavigationTabs = ({ tabs, className }: NavigationTabsProps) => {
               'flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors',
               'hover:bg-white hover:text-gray-900',
               'focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-0',
-              isActive
-                ? 'bg-white text-gray-900 shadow'
-                : 'text-gray-600'
+              isActive ? 'bg-white text-gray-900 shadow' : 'text-gray-600',
             )}
           >
             {tab.label}

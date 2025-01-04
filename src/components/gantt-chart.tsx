@@ -1,9 +1,10 @@
-"use client";
+'use client';
 
-import React, {useMemo} from "react";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
-import {ScrollArea, ScrollBar} from "@/components/ui/scroll-area";
-import Holidays from "date-holidays";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import Holidays from 'date-holidays';
+import type React from 'react';
+import { useMemo } from 'react';
 
 type Task = {
   id: string;
@@ -11,26 +12,34 @@ type Task = {
   startDate: Date;
   endDate: Date;
   progress: number;
-}
+};
 
 type GanttChartProps = {
   tasks: Task[];
   startDate: Date;
   endDate: Date;
-}
+};
 
-const GanttChart: React.FC<GanttChartProps> = ({tasks, startDate, endDate}) => {
-
+const GanttChart: React.FC<GanttChartProps> = ({
+  tasks,
+  startDate,
+  endDate,
+}) => {
   const holidays = useMemo(() => {
     const hd = new Holidays();
     hd.init('JP', 'ja', { timezone: 'Asia/Tokyo' });
     return hd;
   }, []);
 
-  const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+  const totalDays = Math.ceil(
+    (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24),
+  );
 
   const today = new Date(); // 現在の日付
-  const todayPosition = Math.max(0, (today.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+  const todayPosition = Math.max(
+    0,
+    (today.getTime() - startDate.getTime()) / (1000 * 3600 * 24),
+  );
   const todayLeft = (todayPosition / totalDays) * 100;
 
   // 月の名前を取得する関数
@@ -51,7 +60,9 @@ const GanttChart: React.FC<GanttChartProps> = ({tasks, startDate, endDate}) => {
   };
 
   // 休日の種類を判定する関数
-  const getHolidayType = (date: Date): 'saturday' | 'sundayOrHoliday' | null => {
+  const getHolidayType = (
+    date: Date,
+  ): 'saturday' | 'sundayOrHoliday' | null => {
     const day = date.getDay();
     const isPublicHoliday = holidays.isHoliday(date);
 
@@ -74,25 +85,31 @@ const GanttChart: React.FC<GanttChartProps> = ({tasks, startDate, endDate}) => {
   };
 
   const getTaskPosition = (task: Task) => {
-    const start = Math.max(0, (task.startDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24))
-    const duration = (task.endDate.getTime() - task.startDate.getTime()) / (1000 * 3600 * 24)
-    const left = (start / totalDays) * 100
-    const width = (duration / totalDays) * 100
-    return { left: `${left}%`, width: `${width}%` }
-  }
+    const start = Math.max(
+      0,
+      (task.startDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24),
+    );
+    const duration =
+      (task.endDate.getTime() - task.startDate.getTime()) / (1000 * 3600 * 24);
+    const left = (start / totalDays) * 100;
+    const width = (duration / totalDays) * 100;
+    return { left: `${left}%`, width: `${width}%` };
+  };
 
   return (
-    <Card className="w-full">
+    <Card className='w-full'>
       <CardHeader>
         <CardTitle>プロジェクトガントチャート</CardTitle>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-[400px] w-full">
-          <div className="relative w-full" style={{ minWidth: "800px" }}>
+        <ScrollArea className='h-[400px] w-full'>
+          <div className='relative w-full' style={{ minWidth: '800px' }}>
             {/* 祝休日の背景 */}
-            <div className="absolute top-4 bottom-0 w-full">
-              {Array.from({length: totalDays}).map((_, index) => {
-                const date = new Date(startDate.getTime() + index * 24 * 60 * 60 * 1000);
+            <div className='absolute top-4 bottom-0 w-full'>
+              {Array.from({ length: totalDays }).map((_, index) => {
+                const date = new Date(
+                  startDate.getTime() + index * 24 * 60 * 60 * 1000,
+                );
                 const backgroundColorClass = getBackgroundColorClass(date);
                 if (backgroundColorClass) {
                   return (
@@ -101,7 +118,7 @@ const GanttChart: React.FC<GanttChartProps> = ({tasks, startDate, endDate}) => {
                       className={`absolute h-full ${backgroundColorClass}`}
                       style={{
                         left: `${(index / totalDays) * 100}%`,
-                        width: `${(1 / totalDays) * 100}%`
+                        width: `${(1 / totalDays) * 100}%`,
                       }}
                     />
                   );
@@ -111,18 +128,26 @@ const GanttChart: React.FC<GanttChartProps> = ({tasks, startDate, endDate}) => {
             </div>
 
             {/* 時間軸（月と日付） */}
-            <div className="mb-2 relative">
+            <div className='mb-2 relative'>
               {/* 月表示 */}
-              <div className="flex border-b">
-                {Array.from({length: totalDays}).map((_, index) => {
-                  const currentDate = new Date(startDate.getTime() + index * 24 * 60 * 60 * 1000);
-                  const prevDate = new Date(startDate.getTime() + (index - 1) * 24 * 60 * 60 * 1000);
-                  const showMonth = index === 0 || isNewMonth(currentDate, prevDate);
+              <div className='flex border-b'>
+                {Array.from({ length: totalDays }).map((_, index) => {
+                  const currentDate = new Date(
+                    startDate.getTime() + index * 24 * 60 * 60 * 1000,
+                  );
+                  const prevDate = new Date(
+                    startDate.getTime() + (index - 1) * 24 * 60 * 60 * 1000,
+                  );
+                  const showMonth =
+                    index === 0 || isNewMonth(currentDate, prevDate);
 
                   return (
-                    <div key={`month-${index}`} className="flex-1 text-center text-xs">
+                    <div
+                      key={`month-${index}`}
+                      className='flex-1 text-center text-xs'
+                    >
                       {showMonth && (
-                        <div className="font-medium">
+                        <div className='font-medium'>
                           {getMonthName(currentDate)}
                         </div>
                       )}
@@ -131,11 +156,16 @@ const GanttChart: React.FC<GanttChartProps> = ({tasks, startDate, endDate}) => {
                 })}
               </div>
               {/* 日付表示 */}
-              <div className="flex border-b">
+              <div className='flex border-b'>
                 {Array.from({ length: totalDays }).map((_, index) => {
-                  const date = new Date(startDate.getTime() + index * 24 * 60 * 60 * 1000);
+                  const date = new Date(
+                    startDate.getTime() + index * 24 * 60 * 60 * 1000,
+                  );
                   return (
-                    <div key={`day-${index}`} className="flex-1 text-center text-xs">
+                    <div
+                      key={`day-${index}`}
+                      className='flex-1 text-center text-xs'
+                    >
                       {date.getDate()}
                     </div>
                   );
@@ -145,24 +175,24 @@ const GanttChart: React.FC<GanttChartProps> = ({tasks, startDate, endDate}) => {
 
             {/* 現在日付の線 */}
             <div
-              className="absolute top-0 bottom-0 w-px bg-red-500"
+              className='absolute top-0 bottom-0 w-px bg-red-500'
               style={{
                 left: `${todayLeft}%`,
-                zIndex: 10
+                zIndex: 10,
               }}
             />
 
             {/* タスク */}
-            {tasks.map((task) => (
-              <div key={task.id} className="flex items-center mb-2">
-                <div className="w-1/4 pr-2 text-sm">{task.name}</div>
-                <div className="w-3/4 relative h-6">
+            {tasks.map(task => (
+              <div key={task.id} className='flex items-center mb-2'>
+                <div className='w-1/4 pr-2 text-sm'>{task.name}</div>
+                <div className='w-3/4 relative h-6'>
                   <div
-                    className="absolute h-full bg-blue-500 rounded overflow-hidden"
+                    className='absolute h-full bg-blue-500 rounded overflow-hidden'
                     style={getTaskPosition(task)}
                   >
                     <div
-                      className="h-full bg-blue-700"
+                      className='h-full bg-blue-700'
                       style={{
                         width: `${task.progress}%`,
                         background: `repeating-linear-gradient(
@@ -171,7 +201,7 @@ const GanttChart: React.FC<GanttChartProps> = ({tasks, startDate, endDate}) => {
                         transparent 10px,
                         rgba(255,255,255,0.2) 10px,
                         rgba(255,255,255,0.2) 20px
-                      )`
+                      )`,
                       }}
                     />
                   </div>
@@ -179,11 +209,11 @@ const GanttChart: React.FC<GanttChartProps> = ({tasks, startDate, endDate}) => {
               </div>
             ))}
           </div>
-          <ScrollBar orientation="horizontal"/>
+          <ScrollBar orientation='horizontal' />
         </ScrollArea>
       </CardContent>
     </Card>
-)
-}
+  );
+};
 
-export default GanttChart
+export default GanttChart;
