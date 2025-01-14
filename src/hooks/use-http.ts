@@ -25,7 +25,7 @@ const fetchWithParams = async ([url, params]: [
  * Hooks for Http Request
  * @returns
  */
-const useHttp = () => {
+export const useHttp = () => {
   // const alert = useAlertSnackbar();
 
   return {
@@ -195,5 +195,3 @@ const useHttp = () => {
     },
   };
 };
-
-export default useHttp;
