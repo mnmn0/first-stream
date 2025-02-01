@@ -9,8 +9,8 @@ export async function GET() {
         name: true,
         email: true,
         imageUrl: true,
-        createdAt: true,
-        updatedAt: true,
+        createdAt: false,
+        updatedAt: false,
       },
     });
 
