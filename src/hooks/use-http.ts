@@ -1,5 +1,6 @@
 import axios, { type AxiosError, type AxiosResponse } from 'axios';
 import useSWR, { type SWRConfiguration } from 'swr';
+import { useUser } from '@/types/user';
 
 const api = axios.create({
   baseURL: process.env.VITE_APP_API_ENDPOINT,
@@ -193,5 +194,6 @@ export const useHttp = () => {
           });
       });
     },
+    currentUser: () => get<User>('/api/auth/me'),
   };
 };
