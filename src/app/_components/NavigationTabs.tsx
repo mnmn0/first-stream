@@ -1,46 +1,50 @@
-export type TabItem = {
+import { cn } from '@/lib/utils';
+import type { LucideIcon } from 'lucide-react';
+import type React from 'react';
+
+export interface TabItem {
   id: string;
   label: string;
   href: string;
-};
-
-import { cn } from '@/lib/utils';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+  icon?: LucideIcon;
+}
 
 interface NavigationTabsProps {
   tabs: TabItem[];
-  className?: string;
+  selectedTab: TabItem;
+  onTabChange: (tab: TabItem) => void;
 }
 
-export const NavigationTabs = ({ tabs, className }: NavigationTabsProps) => {
-  const pathname = usePathname();
-
+export const NavigationTabs: React.FC<NavigationTabsProps> = ({
+  tabs,
+  selectedTab,
+  onTabChange,
+}) => {
   return (
-    <nav
-      className={cn(
-        'w-full grid grid-cols-2 rounded-lg gap-1 bg-gray-100 p-1',
-        className,
-      )}
-    >
+    <div className="flex w-full space-x-1 p-1">
       {tabs.map(tab => {
-        const isActive = pathname === tab.href;
-
+        const Icon = tab.icon;
         return (
-          <Link
+          <button
             key={tab.id}
-            href={tab.href}
             className={cn(
-              'flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors',
-              'hover:bg-white hover:text-gray-900',
-              'focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-0',
-              isActive ? 'bg-white text-gray-900 shadow' : 'text-gray-600',
+              'inline-flex w-full items-center justify-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+              tab.id === selectedTab.id
+                ? 'bg-primary text-primary-foreground shadow hover:bg-primary/90'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
             )}
+            onClick={() => onTabChange(tab)}
+            role="tab"
+            aria-selected={tab.id === selectedTab.id}
+            aria-controls={`${tab.id}-panel`}
           >
+            {Icon && <Icon className="h-4 w-4" />}
             {tab.label}
-          </Link>
+          </button>
         );
       })}
-    </nav>
+    </div>
   );
 };
+
+export default NavigationTabs;

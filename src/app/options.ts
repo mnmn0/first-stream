@@ -1,5 +1,6 @@
 import type { NextAuthOptions } from 'next-auth';
 import GitHubProvider from 'next-auth/providers/github';
+import { prisma } from '@/lib/prisma';
 
 export const options: NextAuthOptions = {
   session: { strategy: 'jwt' },
@@ -12,12 +13,13 @@ export const options: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    jwt: async ({ token, user, account, profile, isNewUser }) => {
-      if (user) {
-        token.user = user;
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-        const u = user as any;
-        token.role = u.role;
+    jwt: async ({ token, user, account }) => {
+      if (user?.email) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: user.email },
+          select: { isAdmin: true },
+        });
+        token.isAdmin = !!dbUser?.isAdmin;
       }
       if (account) {
         token.accessToken = account.access_token;
@@ -25,13 +27,11 @@ export const options: NextAuthOptions = {
       return token;
     },
     session: ({ session, token }) => {
-      console.log('in session', { session, token });
-      token.accessToken;
       return {
         ...session,
         user: {
           ...session.user,
-          role: token.role,
+          isAdmin: token.isAdmin,
         },
       };
     },

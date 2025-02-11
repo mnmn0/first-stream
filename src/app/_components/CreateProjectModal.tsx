@@ -24,6 +24,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Textarea } from '@/components/ui/textarea';
+import { useUser } from '@/hooks/use-user';
 import { fetcher } from '@/lib/api/fetcher';
 import type { CreateProject } from '@/types/json/project/project';
 import type { Member } from '@/types/json/user/member';
@@ -48,8 +49,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
     description: '',
   });
 
-  const { data, error } = useSWR('/api/user', fetcher);
-
+  const { data: users } = useUser().users;
   const toggleMember = (member: Member): void => {
     setSelectedMembers(current => {
       const exists = current.find(m => m.id === member.id);
@@ -126,35 +126,38 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                   <CommandList>
                     <CommandEmpty>No results found.</CommandEmpty>
                     <CommandGroup>
-                      {members.map(member => (
-                        <CommandItem
-                          key={member.id}
-                          onSelect={() => {
-                            toggleMember(member);
-                            setMemberSearchOpen(false);
-                          }}
-                        >
-                          <div className='flex items-center gap-2 flex-1'>
-                            <Avatar className='h-6 w-6'>
-                              <AvatarImage src={member.avatar} />
-                              <AvatarFallback>{member.name[0]}</AvatarFallback>
-                            </Avatar>
-                            <div className='flex flex-col'>
-                              <span className='text-sm'>{member.name}</span>
-                              <span className='text-xs text-muted-foreground'>
-                                {member.email}
-                              </span>
+                      {users &&
+                        users.map(member => (
+                          <CommandItem
+                            key={member.id}
+                            onSelect={() => {
+                              toggleMember(member);
+                              setMemberSearchOpen(false);
+                            }}
+                          >
+                            <div className='flex items-center gap-2 flex-1'>
+                              <Avatar className='h-6 w-6'>
+                                <AvatarImage src={member.avatar} />
+                                <AvatarFallback>
+                                  {member.name[0]}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div className='flex flex-col'>
+                                <span className='text-sm'>{member.name}</span>
+                                <span className='text-xs text-muted-foreground'>
+                                  {member.email}
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                          <Check
-                            className={`ml-auto h-4 w-4 ${
-                              selectedMembers.find(m => m.id === member.id)
-                                ? 'opacity-100'
-                                : 'opacity-0'
-                            }`}
-                          />
-                        </CommandItem>
-                      ))}
+                            <Check
+                              className={`ml-auto h-4 w-4 ${
+                                selectedMembers.find(m => m.id === member.id)
+                                  ? 'opacity-100'
+                                  : 'opacity-0'
+                              }`}
+                            />
+                          </CommandItem>
+                        ))}
                     </CommandGroup>
                   </CommandList>
                 </Command>
@@ -201,5 +204,5 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
   );
 };
 
-export type { CreateProjectModalProps }; // 型をエクスポート
+export type { CreateProjectModalProps };
 export default CreateProjectModal;

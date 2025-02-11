@@ -1,26 +1,33 @@
-import { getToken } from "next-auth/jwt";
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextResponse } from 'next/server';
+import { withAuth } from 'next-auth/middleware';
 
-export async function middleware(request: NextRequest) {
-  const token = await getToken({ req: request });
-  const isAuthPage = request.nextUrl.pathname.startsWith("/auth");
+export default withAuth(
+  async function middleware(req) {
+    const token = req.nextauth.token;
+    if (!token?.email) {
+      return NextResponse.redirect(new URL('/auth/signin', req.url));
+    }
 
-  if (isAuthPage) {
-    if (token) {
-      return NextResponse.redirect(new URL("/", request.url));
+    // 管理者ページへのアクセスをチェック
+    if (req.nextUrl.pathname.startsWith('/admin')) {
+      if (!token.isAdmin) {
+        return NextResponse.redirect(new URL('/', req.url));
+      }
     }
     return NextResponse.next();
+  },
+  {
+    callbacks: {
+      authorized: ({ token }) => !!token,
+    },
   }
-
-  if (!token) {
-    const loginUrl = new URL("/auth/login", request.url);
-    return NextResponse.redirect(loginUrl);
-  }
-
-  return NextResponse.next();
-}
+);
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    '/admin/:path*',
+    '/project/:path*',
+    '/person/:path*',
+    '/chart/:path*',
+  ],
 };

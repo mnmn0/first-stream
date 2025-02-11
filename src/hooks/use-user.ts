@@ -1,14 +1,35 @@
-import { User } from '@/types/user';
-import { useHttp } from './use-http';
+import useSWR from 'swr';
+import { fetcher } from '@/lib/api/fetcher';
+import { User } from '@prisma/client';
 
 export const useUser = () => {
-  const http = useHttp();
+  const {
+    data: currentUser,
+    error: currentUserError,
+    isLoading: isCurrentUserLoading,
+    mutate: mutateCurrentUser,
+  } = useSWR<User>('/api/users/me', fetcher);
+
+  const {
+    data: users,
+    error: usersError,
+    isLoading: isUsersLoading,
+    mutate: mutateUsers,
+  } = useSWR<User[]>('/api/users', fetcher);
 
   return {
-    users: http.get<User[]>('/api/users'),
-    currentUser: http.get<User>('/api/auth/me'),
-    getUser: (userId: string) => http.get<User>(`/api/users/${userId}`),
-    getUserByEmail: (email: string) => http.get<User>(`/api/users/email/${email}`),
+    currentUser: {
+      data: currentUser,
+      error: currentUserError,
+      isLoading: isCurrentUserLoading,
+      mutate: mutateCurrentUser,
+    },
+    users: {
+      data: users,
+      error: usersError,
+      isLoading: isUsersLoading,
+      mutate: mutateUsers,
+    },
   };
-}
+};
 

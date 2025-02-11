@@ -4,7 +4,13 @@ import { CreateProjectButton } from '@/app/_components/CreateProjectButton';
 import CreateProjectModal, {
   type CreateProjectModalProps,
 } from '@/app/_components/CreateProjectModal';
-import { NavigationTabs, TabItem } from '@/app/_components/NavigationTabs';
+import {NavigationTabs, TabItem} from "@/app/_components/NavigationTabs";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Sidebar,
   SidebarContent,
@@ -17,14 +23,14 @@ import {
   SidebarMenuItem,
   SidebarMenuSkeleton,
 } from '@/components/ui/sidebar';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Calendar, Home, Inbox, Search, Settings, User, Users, FolderKanban } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { useProject } from '@/hooks/use-project';
+import { useUser } from '@/hooks/use-user';
+import { Calendar, FolderKanban, Home, Inbox, LogOut, Search, Settings, Shield, User, Users } from 'lucide-react';
+import { signOut } from 'next-auth/react';
+import { usePathname, useRouter } from 'next/navigation';
 import type React from 'react';
 import { useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import { useUser } from '@/hooks/use-user';
-import { useProject } from '@/hooks/use-project';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 const navigationTabs: TabItem[] = [
   {
@@ -69,6 +75,10 @@ const AppSidebar: React.FC = () => {
 
   const handleProjectClick = (projectId: string) => {
     router.push(`/project/${projectId}`);
+  };
+
+  const handleSignOut = () => {
+    signOut();
   };
 
   const renderContent = () => {
@@ -172,19 +182,74 @@ const AppSidebar: React.FC = () => {
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
+
+          {currentUser?.isAdmin && (
+            <SidebarGroup>
+              <SidebarGroupLabel>Administration</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <SidebarMenuButton
+                          asChild
+                          isActive={pathname === '/admin/users'}
+                        >
+                          <a href="/admin/users">
+                            <Shield className="h-4 w-4" />
+                            <span>User Management</span>
+                          </a>
+                        </SidebarMenuButton>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        <p>Manage user access and permissions</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          )}
         </SidebarContent>
         <SidebarFooter>
           {currentUser && (
-            <div className="flex items-center gap-3 px-3 py-2">
-              <Avatar>
-                <AvatarImage
-                  src={currentUser.imageUrl ?? undefined}
-                  alt={currentUser.name}
-                />
-                <AvatarFallback>{currentUser.name.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <span className="text-sm font-medium">{currentUser.name}</span>
-            </div>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button className="flex w-full items-center gap-3 px-3 py-2 hover:bg-accent">
+                  <Avatar>
+                    <AvatarImage
+                      src={currentUser.imageUrl ?? undefined}
+                      alt={currentUser.name}
+                    />
+                    <AvatarFallback>{currentUser.name}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-1 flex-col text-left">
+                    <span className="text-sm font-medium">{currentUser.name}</span>
+                    {currentUser.isAdmin && (
+                      <span className="text-xs text-muted-foreground">Administrator</span>
+                    )}
+                  </div>
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-56" align="start" side="top">
+                {currentUser?.isAdmin && (
+                  <a
+                    href="/admin/users"
+                    className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent"
+                  >
+                    <Shield className="h-4 w-4" />
+                    <span>ユーザー管理</span>
+                  </a>
+                )}
+                <button
+                  onClick={handleSignOut}
+                  className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>ログアウト</span>
+                </button>
+              </PopoverContent>
+            </Popover>
           )}
         </SidebarFooter>
       </Sidebar>
