@@ -56,6 +56,11 @@ const AppSidebar: React.FC = () => {
   const { data: projectData, isLoading: isLoadingProjects, error: projectError } = useProject().projects;
   const { data: currentUser } = useUser().currentUser;
 
+  // 管理者画面のパスの場合はサイドバーを表示しない
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
+
   const handleCreateClick = () => {
     setIsModalOpen(true);
   };
