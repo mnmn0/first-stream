@@ -130,3 +130,4 @@ dist
 .pnp.*
 .idea
 postgres_data
+.DS_Store
