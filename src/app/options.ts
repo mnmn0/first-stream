@@ -13,13 +13,33 @@ export const options: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async signIn({ user, account }) {
+      if (!user.email) return false;
+
+      // ユーザーが存在しない場合は作成
+      const dbUser = await prisma.user.upsert({
+        where: { email: user.email },
+        update: {},
+        create: {
+          id: account?.providerAccountId || '',
+          email: user.email,
+          name: user.name || '',
+          imageUrl: user.image,
+        },
+      });
+
+      return true;
+    },
     jwt: async ({ token, user, account }) => {
-      if (user?.email) {
+      if (user) {
         const dbUser = await prisma.user.findUnique({
-          where: { email: user.email },
-          select: { isAdmin: true },
+          where: { email: user.email! },
+          select: { id: true, isAdmin: true },
         });
-        token.isAdmin = !!dbUser?.isAdmin;
+        if (dbUser) {
+          token.id = dbUser.id;
+          token.isAdmin = dbUser.isAdmin;
+        }
       }
       if (account) {
         token.accessToken = account.access_token;
@@ -31,6 +51,7 @@ export const options: NextAuthOptions = {
         ...session,
         user: {
           ...session.user,
+          id: token.id,
           isAdmin: token.isAdmin,
         },
       };

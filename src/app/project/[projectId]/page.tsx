@@ -1,16 +1,57 @@
+"use client";
+
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useProject } from '@/hooks/use-project';
 import { Avatar } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { TaskBoard } from '@/components/task-board';
+import { Task, TaskStatus } from '@/types/project';
+import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
 
 export default function ProjectPage({
   params,
 }: {
   params: { projectId: string };
 }) {
-  const { project, isLoading, isError } = useProject(params.projectId);
+  const { project, isLoading, isError, mutate } = useProject(params.projectId);
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const handleTaskMove = useCallback(async (taskId: string, newStatus: TaskStatus) => {
+    try {
+      const response = await fetch(`/api/projects/${params.projectId}/tasks/${taskId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (!response.ok) {
+        throw new Error('タスクの更新に失敗しました');
+      }
+
+      await mutate();
+      toast({
+        description: 'タスクのステータスを更新しました',
+      });
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'エラー',
+        description: error instanceof Error ? error.message : 'タスクの更新に失敗しました',
+      });
+      throw error;
+    }
+  }, [params.projectId, mutate, toast]);
+
+  const handleTaskClick = useCallback((taskId: string) => {
+    router.push(`/project/${params.projectId}/task/${taskId}`);
+  }, [params.projectId, router]);
 
   if (isError) {
     return (
@@ -134,34 +175,12 @@ export default function ProjectPage({
 
       <Card>
         <div className='p-6'>
-          <h2 className='text-lg font-semibold mb-4'>タスク</h2>
-          <ScrollArea className='h-[300px]'>
-            <div className='space-y-4'>
-              {project.tasks.map(task => (
-                <Card key={task.id} className='p-4'>
-                  <div className='flex items-center justify-between'>
-                    <div>
-                      <h3 className='font-medium'>{task.title}</h3>
-                      <p className='text-sm text-muted-foreground'>
-                        {task.description || '説明なし'}
-                      </p>
-                    </div>
-                    <div className='flex items-center gap-2'>
-                      {task.assignee && (
-                        <Avatar>
-                          <img
-                            src={task.assignee.imageUrl || ''}
-                            alt={task.assignee.name}
-                          />
-                        </Avatar>
-                      )}
-                      <Badge>{task.status}</Badge>
-                    </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </ScrollArea>
+          <h2 className='text-lg font-semibold mb-4'>タスクボード</h2>
+          <TaskBoard
+            tasks={project.tasks}
+            onTaskMove={handleTaskMove}
+            onTaskClick={handleTaskClick}
+          />
         </div>
       </Card>
     </div>
