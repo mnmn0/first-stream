@@ -1,8 +1,8 @@
-import { prisma } from '@/lib/prisma';
-import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { options } from '@/app/options';
-import { randomUUID } from 'crypto';
+import {prisma} from '@/lib/prisma';
+import {NextResponse} from 'next/server';
+import {getServerSession} from 'next-auth';
+import {options} from '@/app/options';
+import {randomUUID} from 'crypto';
 
 export async function GET() {
   try {
@@ -36,7 +36,7 @@ export async function GET() {
       });
     }
 
-    if (!user.imageUrl && session.user.image) {
+    if (user && !user.imageUrl && session.user.image) {
       user.imageUrl = session.user.image;
     }
 

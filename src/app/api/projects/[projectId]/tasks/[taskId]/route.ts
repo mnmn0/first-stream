@@ -1,7 +1,7 @@
-import { prisma } from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
-import { NextResponse } from 'next/server';
-import { z } from 'zod';
+import {prisma} from '@/lib/prisma';
+import {getServerSession} from 'next-auth';
+import {NextResponse} from 'next/server';
+import {z} from 'zod';
 
 const updateTaskSchema = z.object({
   status: z.enum(['TODO', 'IN_PROGRESS', 'IN_REVIEW', 'DONE']),
@@ -9,7 +9,7 @@ const updateTaskSchema = z.object({
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { projectId: string; taskId: string } }
+  {params}: { params: Promise<{ projectId: string; taskId: string }> }
 ) {
   try {
     const session = await getServerSession();
@@ -20,11 +20,13 @@ export async function PATCH(
     const json = await req.json();
     const body = updateTaskSchema.parse(json);
 
+    const {projectId, taskId} = await params;
+
     // プロジェクトメンバーのチェック
     const member = await prisma.projectMember.findUnique({
       where: {
         projectId_userId: {
-          projectId: params.projectId,
+          projectId,
           userId: session.user.id,
         },
       },
@@ -36,8 +38,8 @@ export async function PATCH(
 
     const task = await prisma.task.findUnique({
       where: {
-        id: params.taskId,
-        projectId: params.projectId,
+        id: taskId,
+        projectId,
       },
     });
 
@@ -47,7 +49,7 @@ export async function PATCH(
 
     const updatedTask = await prisma.task.update({
       where: {
-        id: params.taskId,
+        id: taskId,
       },
       data: {
         status: body.status,

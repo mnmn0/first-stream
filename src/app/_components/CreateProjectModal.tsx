@@ -1,37 +1,18 @@
 'use client';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { Textarea } from '@/components/ui/textarea';
-import { useUser } from '@/hooks/use-user';
-import { fetcher } from '@/lib/api/fetcher';
-import type { CreateProject } from '@/types/json/project/project';
-import type { Member } from '@/types/json/user/member';
-import { Check, ChevronsUpDown, X } from 'lucide-react';
+import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
+import {Badge} from '@/components/ui/badge';
+import {Button} from '@/components/ui/button';
+import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList,} from '@/components/ui/command';
+import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle,} from '@/components/ui/dialog';
+import {Input} from '@/components/ui/input';
+import {Popover, PopoverContent, PopoverTrigger,} from '@/components/ui/popover';
+import {Textarea} from '@/components/ui/textarea';
+import {useUser} from '@/hooks/use-user';
+import type {CreateProject} from '@/types/json/project/project';
+import type {Member} from '@/types/json/user/member';
+import {Check, ChevronsUpDown, X} from 'lucide-react';
 import type React from 'react';
-import { useState } from 'react';
-import useSWR from 'swr';
+import {useState} from 'react';
 
 interface CreateProjectModalProps {
   open: boolean;
@@ -49,7 +30,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
     description: '',
   });
 
-  const { data: users } = useUser().users;
+  const {users} = useUser();
   const toggleMember = (member: Member): void => {
     setSelectedMembers(current => {
       const exists = current.find(m => m.id === member.id);
@@ -126,18 +107,22 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                   <CommandList>
                     <CommandEmpty>No results found.</CommandEmpty>
                     <CommandGroup>
-                      {users &&
-                        users.map(member => (
+                      {users.data?.map(member => (
                           <CommandItem
                             key={member.id}
                             onSelect={() => {
-                              toggleMember(member);
+                              toggleMember({
+                                id: Number(member.id),
+                                name: member.name,
+                                email: member.email,
+                                avatar: member.imageUrl || '',
+                              });
                               setMemberSearchOpen(false);
                             }}
                           >
                             <div className='flex items-center gap-2 flex-1'>
                               <Avatar className='h-6 w-6'>
-                                <AvatarImage src={member.avatar} />
+                                <AvatarImage src={member.imageUrl || ''}/>
                                 <AvatarFallback>
                                   {member.name[0]}
                                 </AvatarFallback>
@@ -151,7 +136,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                             </div>
                             <Check
                               className={`ml-auto h-4 w-4 ${
-                                selectedMembers.find(m => m.id === member.id)
+                                selectedMembers.find(m => m.id === Number(member.id))
                                   ? 'opacity-100'
                                   : 'opacity-0'
                               }`}

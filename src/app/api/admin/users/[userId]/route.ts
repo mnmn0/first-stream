@@ -1,11 +1,11 @@
-import { prisma } from '@/lib/prisma';
-import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { options } from '@/app/options';
+import {prisma} from '@/lib/prisma';
+import {NextResponse} from 'next/server';
+import {getServerSession} from 'next-auth';
+import {options} from '@/app/options';
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { userId: string } }
+  {params}: { params: Promise<{ userId: string }> }
 ) {
   try {
     const session = await getServerSession(options);
@@ -27,7 +27,7 @@ export async function PATCH(
       );
     }
 
-    const { userId } = params;
+    const {userId} = await params;
     const data = await request.json();
 
     // isAdminまたはisActiveのみを更新可能

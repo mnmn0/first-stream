@@ -1,31 +1,18 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {useForm} from 'react-hook-form';
 import * as z from 'zod';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
-import { toast } from '@/components/ui/use-toast';
+import {Button} from '@/components/ui/button';
+import {Card, CardContent, CardDescription, CardHeader, CardTitle,} from '@/components/ui/card';
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel,} from '@/components/ui/form';
+import {Input} from '@/components/ui/input';
+import {Switch} from '@/components/ui/switch';
+import {useToast} from '@/hooks/use-toast';
 
 const settingsSchema = z.object({
-  twoFactorAuth: z.boolean().default(false),
-  strongPasswords: z.boolean().default(true),
+  twoFactorAuth: z.boolean(),
+  strongPasswords: z.boolean(),
   smtpServer: z.string().min(1, 'SMTP server is required'),
   smtpPort: z.string().min(1, 'SMTP port is required').regex(/^\d+$/, 'Must be a number'),
 });
@@ -33,6 +20,7 @@ const settingsSchema = z.object({
 type SettingsSchema = z.infer<typeof settingsSchema>;
 
 export default function SystemSettingsPage() {
+  const {toast} = useToast();
   const form = useForm<SettingsSchema>({
     resolver: zodResolver(settingsSchema),
     defaultValues: {
