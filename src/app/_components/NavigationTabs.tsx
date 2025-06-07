@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils';
-import type { LucideIcon } from 'lucide-react';
+import {cn} from '@/lib/utils';
+import type {LucideIcon} from 'lucide-react';
 import type React from 'react';
 
 export interface TabItem {
@@ -27,6 +27,7 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
         return (
           <button
             key={tab.id}
+            type="button"
             className={cn(
               'inline-flex w-full items-center justify-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
               tab.id === selectedTab.id
