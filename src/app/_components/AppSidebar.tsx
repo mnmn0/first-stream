@@ -1,16 +1,10 @@
 'use client';
 
-import { CreateProjectButton } from '@/app/_components/CreateProjectButton';
-import CreateProjectModal, {
-  type CreateProjectModalProps,
-} from '@/app/_components/CreateProjectModal';
-import {NavigationTabs, TabItem} from "@/app/_components/NavigationTabs";
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import {CreateProjectButton} from '@/app/_components/CreateProjectButton';
+import CreateProjectModal, {type CreateProjectModalProps,} from '@/app/_components/CreateProjectModal';
+import {NavigationTabs, type TabItem} from "@/app/_components/NavigationTabs";
+import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
+import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover";
 import {
   Sidebar,
   SidebarContent,
@@ -23,14 +17,14 @@ import {
   SidebarMenuItem,
   SidebarMenuSkeleton,
 } from '@/components/ui/sidebar';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { useProject } from '@/hooks/use-project';
-import { useUser } from '@/hooks/use-user';
-import { Calendar, FolderKanban, Home, Inbox, LogOut, Search, Settings, Shield, User, Users } from 'lucide-react';
-import { signOut } from 'next-auth/react';
-import { usePathname, useRouter } from 'next/navigation';
+import {Tooltip, TooltipContent, TooltipTrigger} from '@/components/ui/tooltip';
+import {useProject} from '@/hooks/use-project';
+import {useUser} from '@/hooks/use-user';
+import {FolderKanban, LogOut, Shield, Users} from 'lucide-react';
+import {signOut} from 'next-auth/react';
+import {usePathname, useRouter} from 'next/navigation';
 import type React from 'react';
-import { useState } from 'react';
+import {useState} from 'react';
 
 const navigationTabs: TabItem[] = [
   {
@@ -53,7 +47,7 @@ const AppSidebar: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { data: userData, isLoading: isLoadingUsers, error: userError } = useUser().users;
-  const { data: projectData, isLoading: isLoadingProjects, error: projectError } = useProject().projects;
+  const {projects: projectData, projectsLoading: isLoadingProjects, projectsError: projectError} = useProject();
   const { data: currentUser } = useUser().currentUser;
 
   // 管理者画面のパスの場合はサイドバーを表示しない
@@ -89,8 +83,8 @@ const AppSidebar: React.FC = () => {
   const renderContent = () => {
     if (selectedTab.id === 'person') {
       if (isLoadingUsers) {
-        return Array.from({ length: 5 }).map((_, i) => (
-          <SidebarMenuSkeleton key={i} showIcon />
+        return Array.from({length: 5}, (_, i) => (
+          <SidebarMenuSkeleton key={`user-skeleton-${i}-${Date.now()}`} showIcon/>
         ));
       }
 
@@ -110,13 +104,14 @@ const AppSidebar: React.FC = () => {
                 asChild
                 isActive={pathname === `/person/${user.id}`}
               >
-                <a onClick={() => handleUserClick(user.id)}>
+                <button type="button" onClick={() => handleUserClick(user.id)}
+                        className="flex w-full items-center gap-2">
                   <Avatar className="h-8 w-8">
                     <AvatarImage src={user.imageUrl ?? undefined} alt={user.name} />
                     <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <span>{user.name}</span>
-                </a>
+                </button>
               </SidebarMenuButton>
             </TooltipTrigger>
             <TooltipContent side="right">
@@ -129,8 +124,8 @@ const AppSidebar: React.FC = () => {
 
     if (selectedTab.id === 'projects') {
       if (isLoadingProjects) {
-        return Array.from({ length: 5 }).map((_, i) => (
-          <SidebarMenuSkeleton key={i} showIcon />
+        return Array.from({length: 5}, (_, i) => (
+          <SidebarMenuSkeleton key={`project-skeleton-${i}-${Date.now()}`} showIcon/>
         ));
       }
 
@@ -150,10 +145,11 @@ const AppSidebar: React.FC = () => {
                 asChild
                 isActive={pathname === `/project/${project.id}`}
               >
-                <a onClick={() => handleProjectClick(project.id)}>
+                <button type="button" onClick={() => handleProjectClick(project.id)}
+                        className="flex w-full items-center gap-2">
                   <FolderKanban className="h-4 w-4" />
                   <span>{project.name}</span>
-                </a>
+                </button>
               </SidebarMenuButton>
             </TooltipTrigger>
             <TooltipContent side="right">
@@ -220,7 +216,7 @@ const AppSidebar: React.FC = () => {
           {currentUser && (
             <Popover>
               <PopoverTrigger asChild>
-                <button className="flex w-full items-center gap-3 px-3 py-2 hover:bg-accent">
+                <button type="button" className="flex w-full items-center gap-3 px-3 py-2 hover:bg-accent">
                   <Avatar>
                     <AvatarImage
                       src={currentUser.imageUrl ?? undefined}
@@ -247,6 +243,7 @@ const AppSidebar: React.FC = () => {
                   </a>
                 )}
                 <button
+                  type="button"
                   onClick={handleSignOut}
                   className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent"
                 >
