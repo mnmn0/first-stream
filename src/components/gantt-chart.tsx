@@ -1,10 +1,10 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
+import {ScrollArea, ScrollBar} from '@/components/ui/scroll-area';
 import Holidays from 'date-holidays';
 import type React from 'react';
-import { useMemo } from 'react';
+import {useMemo} from 'react';
 
 type Task = {
   id: string;
@@ -106,7 +106,7 @@ const GanttChart: React.FC<GanttChartProps> = ({
           <div className='relative w-full' style={{ minWidth: '800px' }}>
             {/* 祝休日の背景 */}
             <div className='absolute top-4 bottom-0 w-full'>
-              {Array.from({ length: totalDays }).map((_, index) => {
+              {Array.from({length: totalDays}, (_, index) => {
                 const date = new Date(
                   startDate.getTime() + index * 24 * 60 * 60 * 1000,
                 );
@@ -114,7 +114,7 @@ const GanttChart: React.FC<GanttChartProps> = ({
                 if (backgroundColorClass) {
                   return (
                     <div
-                      key={`holiday-bg-${index}`}
+                      key={`holiday-bg-${date.getTime()}`}
                       className={`absolute h-full ${backgroundColorClass}`}
                       style={{
                         left: `${(index / totalDays) * 100}%`,
@@ -131,7 +131,7 @@ const GanttChart: React.FC<GanttChartProps> = ({
             <div className='mb-2 relative'>
               {/* 月表示 */}
               <div className='flex border-b'>
-                {Array.from({ length: totalDays }).map((_, index) => {
+                {Array.from({length: totalDays}, (_, index) => {
                   const currentDate = new Date(
                     startDate.getTime() + index * 24 * 60 * 60 * 1000,
                   );
@@ -143,7 +143,7 @@ const GanttChart: React.FC<GanttChartProps> = ({
 
                   return (
                     <div
-                      key={`month-${index}`}
+                      key={`month-${currentDate.getTime()}`}
                       className='flex-1 text-center text-xs'
                     >
                       {showMonth && (
