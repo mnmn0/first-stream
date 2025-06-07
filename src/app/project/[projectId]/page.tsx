@@ -1,16 +1,16 @@
 "use client";
 
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useProject } from '@/hooks/use-project';
-import { Avatar } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { TaskBoard } from '@/components/task-board';
-import { Task, TaskStatus } from '@/types/project';
-import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
-import { useCallback } from 'react';
+import {Card} from '@/components/ui/card';
+import {Skeleton} from '@/components/ui/skeleton';
+import {useProject} from '@/hooks/use-project';
+import {Avatar} from '@/components/ui/avatar';
+import {Badge} from '@/components/ui/badge';
+import {ScrollArea} from '@/components/ui/scroll-area';
+import {TaskBoard} from '@/components/task-board';
+import {type TaskStatus} from '@/types/project';
+import {useToast} from '@/hooks/use-toast';
+import {useRouter} from 'next/navigation';
+import {useCallback} from 'react';
 
 export default function ProjectPage({
   params,
