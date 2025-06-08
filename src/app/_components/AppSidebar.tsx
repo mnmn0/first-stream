@@ -30,13 +30,11 @@ const navigationTabs: TabItem[] = [
   {
     id: 'person',
     label: 'Persons',
-    href: '/person',
     icon: Users,
   },
   {
     id: 'projects',
     label: 'Projects',
-    href: '/project',
     icon: FolderKanban,
   },
 ];
@@ -65,7 +63,6 @@ const AppSidebar: React.FC = () => {
 
   const handleTabChange = (tab: TabItem) => {
     setSelectedTab(tab);
-    router.push(tab.href);
   };
 
   const handleUserClick = (userId: string) => {
