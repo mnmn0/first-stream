@@ -163,7 +163,7 @@ const GanttChart: React.FC<GanttChartProps> = ({
                   );
                   return (
                     <div
-                      key={`day-${index}`}
+                      key={`day-${date.toISOString()}`}
                       className='flex-1 text-center text-xs'
                     >
                       {date.getDate()}
