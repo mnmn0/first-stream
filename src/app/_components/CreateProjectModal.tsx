@@ -73,14 +73,22 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
 
           {/* Project Name Input */}
           <div className='flex flex-col gap-2'>
-            <label className='text-sm font-medium'>Project name</label>
-            <Input placeholder='Acme Project' />
+            <label htmlFor='project-name' className='text-sm font-medium'>
+              Project name
+            </label>
+            <Input id='project-name' placeholder='Acme Project'/>
           </div>
 
           {/* Description Input */}
           <div className='flex flex-col gap-2'>
-            <label className='text-sm font-medium'>Description</label>
+            <label
+              htmlFor='project-description'
+              className='text-sm font-medium'
+            >
+              Description
+            </label>
             <Textarea
+              id='project-description'
               placeholder='Details about your project'
               className='h-24 resize-none'
             />
@@ -88,12 +96,14 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
 
           {/* Member Assignment */}
           <div className='flex flex-col gap-2'>
-            <label className='text-sm font-medium'>Members</label>
+            <label htmlFor='member-select' className='text-sm font-medium'>
+              Members
+            </label>
             <Popover open={memberSearchOpen} onOpenChange={setMemberSearchOpen}>
               <PopoverTrigger asChild>
                 <Button
+                  id='member-select'
                   variant='outline'
-                  role='combobox'
                   aria-expanded={memberSearchOpen}
                   className='justify-between'
                 >

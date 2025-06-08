@@ -6,9 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "biome lint -- apply ./src/**/*",
-    "format": "biome format ./src/**/* --write",
-    "check": "biome check --apply ./src/**/*",
+    "lint": "npx @biomejs/biome lint ./src/",
+    "format": "npx @biomejs/biome check ./src/ --write",
     "test": "vitest"
   },
   "dependencies": {

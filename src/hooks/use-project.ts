@@ -1,6 +1,6 @@
 import type {Project} from '@/types/project';
-import {useHttp} from './use-http';
 import {AxiosError} from 'axios';
+import {useHttp} from './use-http';
 
 export const useProject = (projectId?: string) => {
   const http = useHttp();

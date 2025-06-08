@@ -1,6 +1,6 @@
-import useSWR from 'swr';
 import {fetcher} from '@/lib/api/fetcher';
 import type {User} from '@prisma/client';
+import useSWR from 'swr';
 
 export const useUser = () => {
   const {

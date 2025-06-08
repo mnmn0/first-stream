@@ -1,8 +1,8 @@
-import {beforeEach, describe, expect, it, vi} from 'vitest';
-import axios from 'axios';
 import {renderHook, waitFor} from '@testing-library/react';
-import {useHttp} from '../use-http';
+import axios from 'axios';
 import useSWR from 'swr';
+import {beforeEach, describe, expect, it, vi} from 'vitest';
+import {useHttp} from '../use-http';
 
 // モックの設定
 vi.mock('axios', () => {
@@ -44,7 +44,13 @@ vi.mock('swr', () => ({
 vi.stubEnv('VITE_APP_API_ENDPOINT', 'http://localhost:3000');
 
 describe('useHttp', () => {
-  let mockAxios: any;
+  let mockAxios: {
+    get: ReturnType<typeof vi.fn>;
+    post: ReturnType<typeof vi.fn>;
+    put: ReturnType<typeof vi.fn>;
+    delete: ReturnType<typeof vi.fn>;
+    patch: ReturnType<typeof vi.fn>;
+  };
 
   beforeEach(() => {
     vi.clearAllMocks();

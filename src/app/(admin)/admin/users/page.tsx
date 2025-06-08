@@ -1,12 +1,5 @@
 'use client';
 
-import {Button} from '@/components/ui/button';
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from '@/components/ui/table';
-import {useUser} from '@/hooks/use-user';
-import {Users} from 'lucide-react';
-import {Switch} from '@/components/ui/switch';
-import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
-import {Badge} from '@/components/ui/badge';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,8 +11,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import {useState} from 'react';
+import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
+import {Badge} from '@/components/ui/badge';
+import {Button} from '@/components/ui/button';
+import {Switch} from '@/components/ui/switch';
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from '@/components/ui/table';
 import {useToast} from '@/hooks/use-toast';
+import {useUser} from '@/hooks/use-user';
+import {Users} from 'lucide-react';
+import {useState} from 'react';
 
 export default function AdminUsersPage() {
   const { data: users, isLoading, error, mutate } = useUser().users;

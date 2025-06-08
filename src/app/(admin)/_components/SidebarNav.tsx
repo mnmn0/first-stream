@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
-import {usePathname} from 'next/navigation';
 import {cn} from '@/lib/utils';
 import {FileText, Settings, Shield, Users} from 'lucide-react';
+import Link from 'next/link';
+import {usePathname} from 'next/navigation';
 
 const sidebarNavItems = [
   {

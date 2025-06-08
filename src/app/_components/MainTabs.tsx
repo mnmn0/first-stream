@@ -1,8 +1,20 @@
 'use client';
 
-import {use, useCallback, useEffect, useState} from 'react';
-import {usePathname} from 'next/navigation';
-import {NavigationTabs, type TabItem} from './NavigationTabs';
+import GanttChart from '@/components/gantt-chart';
+import {TaskBoard} from '@/components/task-board';
+import {Avatar} from '@/components/ui/avatar';
+import {Badge} from '@/components/ui/badge';
+import {Button} from '@/components/ui/button';
+import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
+import {ScrollArea} from '@/components/ui/scroll-area';
+import {Skeleton} from '@/components/ui/skeleton';
+import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
+import {useProject} from '@/hooks/use-project';
+import {useToast} from '@/hooks/use-toast';
+import {useUser} from '@/hooks/use-user';
+import {fetcher} from '@/lib/api/fetcher';
+import type {Task, TaskStatus} from '@/types/project';
+import type {User} from '@prisma/client';
 import {
   AlertCircle,
   Calendar,
@@ -14,23 +26,11 @@ import {
   Plus,
   Users,
 } from 'lucide-react';
-import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-import {Avatar} from '@/components/ui/avatar';
-import {Badge} from '@/components/ui/badge';
-import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-import {ScrollArea} from '@/components/ui/scroll-area';
-import {Skeleton} from '@/components/ui/skeleton';
-import {useUser} from '@/hooks/use-user';
-import {useProject} from '@/hooks/use-project';
-import {Button} from '@/components/ui/button';
-import type {User} from '@prisma/client';
-import type {Task, TaskStatus} from '@/types/project';
+import {usePathname} from 'next/navigation';
+import {use, useCallback, useEffect, useState} from 'react';
 import useSWR from 'swr';
-import {fetcher} from '@/lib/api/fetcher';
-import {useToast} from '@/hooks/use-toast';
-import {TaskBoard} from '@/components/task-board';
-import GanttChart from '@/components/gantt-chart';
 import {CreateTaskModal} from '../project/[projectId]/_components/CreateTaskModal';
+import {NavigationTabs, type TabItem} from './NavigationTabs';
 
 interface TaskWithProject extends Omit<Task, 'project'> {
   project: {
@@ -255,9 +255,10 @@ export function MainTabs({params}: MainTabsProps) {
       <div className='container mx-auto p-6 space-y-6'>
         <Skeleton className='h-10 w-64'/>
         <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
-          {[...Array(4)].map((_, i) => (
-            <Skeleton key={`loading-skeleton-${i}`} className='h-32'/>
-          ))}
+          <Skeleton className='h-32'/>
+          <Skeleton className='h-32'/>
+          <Skeleton className='h-32'/>
+          <Skeleton className='h-32'/>
         </div>
       </div>
     );
@@ -275,9 +276,10 @@ export function MainTabs({params}: MainTabsProps) {
             </div>
           </div>
           <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
-            {[...Array(4)].map((_, i) => (
-              <Skeleton key={`person-skeleton-${i}`} className='h-32'/>
-            ))}
+            <Skeleton className='h-32'/>
+            <Skeleton className='h-32'/>
+            <Skeleton className='h-32'/>
+            <Skeleton className='h-32'/>
           </div>
         </div>
       );
@@ -376,17 +378,11 @@ export function MainTabs({params}: MainTabsProps) {
                   <div className='space-y-2'>
                     {userTasks && userTasks.length > 0 ? (
                       userTasks.map(task => (
-                        <div
+                        <button
                           key={task.id}
-                          className='p-3 rounded-lg border hover:bg-secondary/50 cursor-pointer transition-colors'
+                          className='p-3 rounded-lg border hover:bg-secondary/50 cursor-pointer transition-colors w-full text-left'
                           onClick={() => handleTaskClick(task)}
-                          onKeyDown={e => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              handleTaskClick(task);
-                            }
-                          }}
-                          role='button'
-                          tabIndex={0}
+                          type='button'
                         >
                           <div className='flex items-center justify-between'>
                             <div className='flex-1'>
@@ -415,7 +411,7 @@ export function MainTabs({params}: MainTabsProps) {
                               )}
                             </div>
                           </div>
-                        </div>
+                        </button>
                       ))
                     ) : (
                       <p className='text-center text-muted-foreground py-8'>
@@ -431,17 +427,11 @@ export function MainTabs({params}: MainTabsProps) {
                   <div className='space-y-2'>
                     {todoTasks.length > 0 ? (
                       todoTasks.map(task => (
-                        <div
+                        <button
                           key={task.id}
-                          className='p-3 rounded-lg border hover:bg-secondary/50 cursor-pointer transition-colors'
+                          className='p-3 rounded-lg border hover:bg-secondary/50 cursor-pointer transition-colors w-full text-left'
                           onClick={() => handleTaskClick(task)}
-                          onKeyDown={e => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              handleTaskClick(task);
-                            }
-                          }}
-                          role='button'
-                          tabIndex={0}
+                          type='button'
                         >
                           <div className='flex items-center justify-between'>
                             <div className='flex-1'>
@@ -459,7 +449,7 @@ export function MainTabs({params}: MainTabsProps) {
                               </span>
                             )}
                           </div>
-                        </div>
+                        </button>
                       ))
                     ) : (
                       <p className='text-center text-muted-foreground py-8'>
@@ -474,17 +464,11 @@ export function MainTabs({params}: MainTabsProps) {
                   <div className='space-y-2'>
                     {inProgressTasks.length > 0 ? (
                       inProgressTasks.map(task => (
-                        <div
+                        <button
                           key={task.id}
-                          className='p-3 rounded-lg border hover:bg-secondary/50 cursor-pointer transition-colors'
+                          className='p-3 rounded-lg border hover:bg-secondary/50 cursor-pointer transition-colors w-full text-left'
                           onClick={() => handleTaskClick(task)}
-                          onKeyDown={e => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              handleTaskClick(task);
-                            }
-                          }}
-                          role='button'
-                          tabIndex={0}
+                          type='button'
                         >
                           <div className='flex items-center justify-between'>
                             <div className='flex-1'>
@@ -502,7 +486,7 @@ export function MainTabs({params}: MainTabsProps) {
                               </span>
                             )}
                           </div>
-                        </div>
+                        </button>
                       ))
                     ) : (
                       <p className='text-center text-muted-foreground py-8'>
@@ -517,17 +501,11 @@ export function MainTabs({params}: MainTabsProps) {
                   <div className='space-y-2'>
                     {upcomingTasks.length > 0 ? (
                       upcomingTasks.map(task => (
-                        <div
+                        <button
                           key={task.id}
-                          className='p-3 rounded-lg border hover:bg-secondary/50 cursor-pointer transition-colors'
+                          className='p-3 rounded-lg border hover:bg-secondary/50 cursor-pointer transition-colors w-full text-left'
                           onClick={() => handleTaskClick(task)}
-                          onKeyDown={e => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              handleTaskClick(task);
-                            }
-                          }}
-                          role='button'
-                          tabIndex={0}
+                          type='button'
                         >
                           <div className='flex items-center justify-between'>
                             <div className='flex-1'>
@@ -562,7 +540,7 @@ export function MainTabs({params}: MainTabsProps) {
                               )}
                             </div>
                           </div>
-                        </div>
+                        </button>
                       ))
                     ) : (
                       <p className='text-center text-muted-foreground py-8'>
@@ -781,9 +759,9 @@ export function MainTabs({params}: MainTabsProps) {
         <div className='container mx-auto p-6 space-y-6'>
           <Skeleton className='h-10 w-64'/>
           <div className='grid gap-4'>
-            {[...Array(3)].map((_, i) => (
-              <Skeleton key={`project-skeleton-${i}`} className='h-32'/>
-            ))}
+            <Skeleton className='h-32'/>
+            <Skeleton className='h-32'/>
+            <Skeleton className='h-32'/>
           </div>
         </div>
       );

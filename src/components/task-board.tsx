@@ -1,11 +1,11 @@
 'use client';
 
 import {Card} from '@/components/ui/card';
+import type {Task, TaskStatus} from '@/types/project';
 import {DragDropContext, Draggable, Droppable, type DropResult,} from '@hello-pangea/dnd';
 import {useCallback, useState} from 'react';
 import {Avatar} from './ui/avatar';
 import {Badge} from './ui/badge';
-import type {Task, TaskStatus} from '@/types/project';
 
 const TASK_STATUSES: TaskStatus[] = [
   'TODO',

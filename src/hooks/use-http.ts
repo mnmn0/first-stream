@@ -84,8 +84,7 @@ export const useHttp = () => {
      * @param errorProcess
      * @returns
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    post: <RES = any, DATA = any>(
+    post: <RES = unknown, DATA = unknown>(
       url: string,
       data: DATA,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -115,8 +114,7 @@ export const useHttp = () => {
      * @param errorProcess
      * @returns
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    put: <RES = any, DATA = any>(
+    put: <RES = unknown, DATA = unknown>(
       url: string,
       data: DATA,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -145,8 +143,7 @@ export const useHttp = () => {
      * @param errorProcess
      * @returns
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    delete: <RES = any, DATA = any>(
+    delete: <RES = unknown, DATA = unknown>(
       url: string,
       params?: DATA,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -170,9 +167,7 @@ export const useHttp = () => {
           });
       });
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    patch: <RES = any, DATA = any>(
+    patch: <RES = unknown, DATA = unknown>(
       url: string,
       data: DATA,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
