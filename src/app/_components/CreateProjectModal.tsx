@@ -108,41 +108,41 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                     <CommandEmpty>No results found.</CommandEmpty>
                     <CommandGroup>
                       {users.data?.map(member => (
-                          <CommandItem
-                            key={member.id}
-                            onSelect={() => {
-                              toggleMember({
-                                id: Number(member.id),
-                                name: member.name,
-                                email: member.email,
-                                avatar: member.imageUrl || '',
-                              });
-                              setMemberSearchOpen(false);
-                            }}
-                          >
-                            <div className='flex items-center gap-2 flex-1'>
-                              <Avatar className='h-6 w-6'>
-                                <AvatarImage src={member.imageUrl || ''}/>
-                                <AvatarFallback>
-                                  {member.name[0]}
-                                </AvatarFallback>
-                              </Avatar>
-                              <div className='flex flex-col'>
-                                <span className='text-sm'>{member.name}</span>
-                                <span className='text-xs text-muted-foreground'>
-                                  {member.email}
-                                </span>
-                              </div>
+                        <CommandItem
+                          key={member.id}
+                          onSelect={() => {
+                            toggleMember({
+                              id: Number(member.id),
+                              name: member.name,
+                              email: member.email,
+                              avatar: member.imageUrl || '',
+                            });
+                            setMemberSearchOpen(false);
+                          }}
+                        >
+                          <div className='flex items-center gap-2 flex-1'>
+                            <Avatar className='h-6 w-6'>
+                              <AvatarImage src={member.imageUrl || ''}/>
+                              <AvatarFallback>{member.name[0]}</AvatarFallback>
+                            </Avatar>
+                            <div className='flex flex-col'>
+                              <span className='text-sm'>{member.name}</span>
+                              <span className='text-xs text-muted-foreground'>
+                                {member.email}
+                              </span>
                             </div>
-                            <Check
-                              className={`ml-auto h-4 w-4 ${
-                                selectedMembers.find(m => m.id === Number(member.id))
-                                  ? 'opacity-100'
-                                  : 'opacity-0'
-                              }`}
-                            />
-                          </CommandItem>
-                        ))}
+                          </div>
+                          <Check
+                            className={`ml-auto h-4 w-4 ${
+                              selectedMembers.find(
+                                m => m.id === Number(member.id),
+                              )
+                                ? 'opacity-100'
+                                : 'opacity-0'
+                            }`}
+                          />
+                        </CommandItem>
+                      ))}
                     </CommandGroup>
                   </CommandList>
                 </Command>
