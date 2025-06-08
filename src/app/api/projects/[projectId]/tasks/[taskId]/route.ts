@@ -9,7 +9,7 @@ const updateTaskSchema = z.object({
 
 export async function PATCH(
   req: Request,
-  {params}: { params: Promise<{ projectId: string; taskId: string }> }
+  {params}: { params: Promise<{ projectId: string; taskId: string }> },
 ) {
   try {
     const session = await getServerSession();

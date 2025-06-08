@@ -1,7 +1,7 @@
-import { prisma } from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
-import { options } from '@/app/options';
-import { NextResponse } from 'next/server';
+import {prisma} from '@/lib/prisma';
+import {getServerSession} from 'next-auth';
+import {options} from '@/app/options';
+import {NextResponse} from 'next/server';
 
 export async function GET() {
   try {
@@ -20,7 +20,7 @@ export async function GET() {
     if (!currentUser?.isAdmin) {
       return NextResponse.json(
         { error: 'Insufficient permissions' },
-        { status: 403 }
+        {status: 403},
       );
     }
 
@@ -45,7 +45,7 @@ export async function GET() {
     console.error('Error fetching users:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
-      { status: 500 }
+      {status: 500},
     );
   }
 }

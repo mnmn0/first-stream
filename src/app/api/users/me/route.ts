@@ -2,7 +2,7 @@ import {prisma} from '@/lib/prisma';
 import {NextResponse} from 'next/server';
 import {getServerSession} from 'next-auth';
 import {options} from '@/app/options';
-import {randomUUID} from 'crypto';
+import {randomUUID} from 'node:crypto';
 
 export async function GET() {
   try {
@@ -43,6 +43,9 @@ export async function GET() {
     return NextResponse.json(user);
   } catch (error) {
     console.error('Error in /api/auth/me:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      {error: 'Internal server error'},
+      {status: 500},
+    );
   }
 }

@@ -3,7 +3,7 @@ import {NextResponse} from 'next/server';
 
 export async function GET(
   request: Request,
-  {params}: { params: Promise<{ userId: string }> }
+  {params}: { params: Promise<{ userId: string }> },
 ) {
   try {
     const user = await prisma.user.findUnique({
@@ -22,10 +22,7 @@ export async function GET(
     });
 
     if (!user) {
-      return NextResponse.json(
-        {error: 'User not found'},
-        {status: 404}
-      );
+      return NextResponse.json({error: 'User not found'}, {status: 404});
     }
 
     return NextResponse.json(user);
@@ -33,7 +30,7 @@ export async function GET(
     console.error('Failed to fetch user:', error);
     return NextResponse.json(
       {error: 'Failed to fetch user'},
-      {status: 500}
+      {status: 500},
     );
   }
 }

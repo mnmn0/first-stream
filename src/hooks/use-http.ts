@@ -13,7 +13,7 @@ const fetcher = async (url: string) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const fetchWithParams = async ([url, params]: [
   string,
-  Record<string, any>,
+  Record<string, unknown>,
 ]) => {
   const res = await api.get(url, {
     params,
@@ -37,7 +37,7 @@ export const useHttp = () => {
      * @returns
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    get: <Data = any, Error = any>(
+    get: <Data = unknown, Error = unknown>(
       url: string | [string, ...unknown[]] | null,
       config?: SWRConfiguration,
     ) => {
@@ -52,11 +52,11 @@ export const useHttp = () => {
     },
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    getOnce: <RES = any, DATA = any>(
+    getOnce: <RES = unknown, DATA = unknown>(
       url: string,
       params?: DATA,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      errorProcess?: (err: any) => void,
+      errorProcess?: (err: unknown) => void,
     ) => {
       return new Promise<AxiosResponse<RES>>((resolve, reject) => {
         api
@@ -89,7 +89,7 @@ export const useHttp = () => {
       url: string,
       data: DATA,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      errorProcess?: (err: any) => void,
+      errorProcess?: (err: unknown) => void,
     ) => {
       return new Promise<AxiosResponse<RES>>((resolve, reject) => {
         api
@@ -120,7 +120,7 @@ export const useHttp = () => {
       url: string,
       data: DATA,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      errorProcess?: (err: any) => void,
+      errorProcess?: (err: unknown) => void,
     ) => {
       return new Promise<AxiosResponse<RES>>((resolve, reject) => {
         api
@@ -150,7 +150,7 @@ export const useHttp = () => {
       url: string,
       params?: DATA,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      errorProcess?: (err: any) => void,
+      errorProcess?: (err: unknown) => void,
     ) => {
       return new Promise<AxiosResponse<RES>>((resolve, reject) => {
         api
@@ -171,11 +171,12 @@ export const useHttp = () => {
       });
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     patch: <RES = any, DATA = any>(
       url: string,
       data: DATA,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      errorProcess?: (err: any) => void,
+      errorProcess?: (err: unknown) => void,
     ) => {
       return new Promise<AxiosResponse<RES>>((resolve, reject) => {
         api

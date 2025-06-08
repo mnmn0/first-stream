@@ -1,7 +1,7 @@
-import { prisma } from '@/lib/prisma';
-import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { options } from '@/app/options';
+import {prisma} from '@/lib/prisma';
+import {NextResponse} from 'next/server';
+import {getServerSession} from 'next-auth';
+import {options} from '@/app/options';
 
 export async function GET() {
   try {
@@ -68,7 +68,7 @@ export async function GET() {
     console.error('Failed to fetch users:', error);
     return NextResponse.json(
       { error: 'Failed to fetch users' },
-      { status: 500 }
+      {status: 500},
     );
   }
 }

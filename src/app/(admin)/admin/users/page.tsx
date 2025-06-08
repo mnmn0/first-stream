@@ -1,19 +1,12 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { useUser } from '@/hooks/use-user';
-import { User, Users } from 'lucide-react';
-import { Switch } from '@/components/ui/switch';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
+import {Button} from '@/components/ui/button';
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from '@/components/ui/table';
+import {useUser} from '@/hooks/use-user';
+import {Users} from 'lucide-react';
+import {Switch} from '@/components/ui/switch';
+import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
+import {Badge} from '@/components/ui/badge';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,8 +18,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { useState } from 'react';
-import {useToast} from "@/hooks/use-toast";
+import {useState} from 'react';
+import {useToast} from '@/hooks/use-toast';
 
 export default function AdminUsersPage() {
   const { data: users, isLoading, error, mutate } = useUser().users;
@@ -95,13 +88,13 @@ export default function AdminUsersPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto py-6">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">User Management</h1>
+      <div className='container mx-auto py-6'>
+        <div className='flex items-center justify-between mb-6'>
+          <h1 className='text-2xl font-bold'>User Management</h1>
         </div>
-        <div className="space-y-4">
-          <div className="h-8 w-32 bg-muted animate-pulse rounded" />
-          <div className="h-64 w-full bg-muted animate-pulse rounded" />
+        <div className='space-y-4'>
+          <div className='h-8 w-32 bg-muted animate-pulse rounded'/>
+          <div className='h-64 w-full bg-muted animate-pulse rounded'/>
         </div>
       </div>
     );
@@ -109,13 +102,13 @@ export default function AdminUsersPage() {
 
   if (error) {
     return (
-      <div className="container mx-auto py-6">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">User Management</h1>
+      <div className='container mx-auto py-6'>
+        <div className='flex items-center justify-between mb-6'>
+          <h1 className='text-2xl font-bold'>User Management</h1>
         </div>
-        <div className="rounded-md bg-destructive/10 p-4">
-          <div className="flex items-center gap-3 text-destructive">
-            <Users className="h-5 w-5" />
+        <div className='rounded-md bg-destructive/10 p-4'>
+          <div className='flex items-center gap-3 text-destructive'>
+            <Users className='h-5 w-5'/>
             <p>Failed to load users</p>
           </div>
         </div>
@@ -124,12 +117,12 @@ export default function AdminUsersPage() {
   }
 
   return (
-    <div className="container mx-auto py-6">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">User Management</h1>
+    <div className='container mx-auto py-6'>
+      <div className='flex items-center justify-between mb-6'>
+        <h1 className='text-2xl font-bold'>User Management</h1>
       </div>
 
-      <div className="rounded-md border">
+      <div className='rounded-md border'>
         <Table>
           <TableHeader>
             <TableRow>
@@ -141,10 +134,10 @@ export default function AdminUsersPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users?.map((user) => (
+            {users?.map(user => (
               <TableRow key={user.id}>
                 <TableCell>
-                  <div className="flex items-center gap-3">
+                  <div className='flex items-center gap-3'>
                     <Avatar>
                       <AvatarImage src={user.imageUrl ?? undefined} />
                       <AvatarFallback>
@@ -158,7 +151,9 @@ export default function AdminUsersPage() {
                 <TableCell>
                   <Switch
                     checked={user.isAdmin}
-                    onCheckedChange={() => handleToggleAdmin(user.id, user.isAdmin)}
+                    onCheckedChange={() =>
+                      handleToggleAdmin(user.id, user.isAdmin)
+                    }
                   />
                 </TableCell>
                 <TableCell>
@@ -170,8 +165,8 @@ export default function AdminUsersPage() {
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button
-                        variant="ghost"
-                        size="sm"
+                        variant='ghost'
+                        size='sm'
                         onClick={() => setUserToUpdate(user.id)}
                       >
                         {user.isActive ? 'Deactivate' : 'Activate'}
@@ -191,7 +186,9 @@ export default function AdminUsersPage() {
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
-                          onClick={() => handleToggleActive(user.id, user.isActive)}
+                          onClick={() =>
+                            handleToggleActive(user.id, user.isActive)
+                          }
                         >
                           Continue
                         </AlertDialogAction>

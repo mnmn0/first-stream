@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import {beforeEach, describe, expect, it, vi} from 'vitest';
 import axios from 'axios';
-import { renderHook, waitFor } from '@testing-library/react';
-import { useHttp } from '../use-http';
+import {renderHook, waitFor} from '@testing-library/react';
+import {useHttp} from '../use-http';
 import useSWR from 'swr';
 
 // モックの設定
@@ -59,7 +59,7 @@ describe('useHttp', () => {
       expect(useSWR).toHaveBeenCalledWith(
         '/test',
         expect.any(Function),
-        expect.any(Object)
+        expect.any(Object),
       );
     });
 
@@ -82,7 +82,9 @@ describe('useHttp', () => {
       const response = await result.current.getOnce('/test');
 
       expect(response.data).toEqual(mockData);
-      expect(mockAxios.get).toHaveBeenCalledWith('/test', { params: undefined });
+      expect(mockAxios.get).toHaveBeenCalledWith('/test', {
+        params: undefined,
+      });
     });
 
     it('単発のGETリクエストが失敗した場合、エラーを処理するのだ', async () => {
@@ -126,7 +128,7 @@ describe('useHttp', () => {
       const { result } = renderHook(() => useHttp());
 
       await expect(
-        result.current.post('/test', postData, mockErrorProcess)
+        result.current.post('/test', postData, mockErrorProcess),
       ).rejects.toThrow('テストエラー');
 
       expect(mockErrorProcess).toHaveBeenCalledWith(mockError);
@@ -156,7 +158,9 @@ describe('useHttp', () => {
       const response = await result.current.delete('/test');
 
       expect(response.data).toEqual(mockData);
-      expect(mockAxios.delete).toHaveBeenCalledWith('/test', { params: undefined });
+      expect(mockAxios.delete).toHaveBeenCalledWith('/test', {
+        params: undefined,
+      });
     });
   });
 

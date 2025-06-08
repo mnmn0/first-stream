@@ -14,7 +14,10 @@ const settingsSchema = z.object({
   twoFactorAuth: z.boolean(),
   strongPasswords: z.boolean(),
   smtpServer: z.string().min(1, 'SMTP server is required'),
-  smtpPort: z.string().min(1, 'SMTP port is required').regex(/^\d+$/, 'Must be a number'),
+  smtpPort: z
+    .string()
+    .min(1, 'SMTP port is required')
+    .regex(/^\d+$/, 'Must be a number'),
 });
 
 type SettingsSchema = z.infer<typeof settingsSchema>;
@@ -40,17 +43,17 @@ export default function SystemSettingsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <div>
-        <h3 className="text-lg font-medium">System Settings</h3>
-        <p className="text-sm text-muted-foreground">
+        <h3 className='text-lg font-medium'>System Settings</h3>
+        <p className='text-sm text-muted-foreground'>
           Configure global system settings and preferences.
         </p>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid gap-4 md:grid-cols-2">
+        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+          <div className='grid gap-4 md:grid-cols-2'>
             <Card>
               <CardHeader>
                 <CardTitle>Security</CardTitle>
@@ -58,14 +61,16 @@ export default function SystemSettingsPage() {
                   Configure security settings for your application.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className='space-y-4'>
                 <FormField
                   control={form.control}
-                  name="twoFactorAuth"
+                  name='twoFactorAuth'
                   render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between space-x-2 rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <FormLabel className="text-base">Two-factor Authentication</FormLabel>
+                    <FormItem className='flex flex-row items-center justify-between space-x-2 rounded-lg border p-4'>
+                      <div className='space-y-0.5'>
+                        <FormLabel className='text-base'>
+                          Two-factor Authentication
+                        </FormLabel>
                         <FormDescription>
                           Require 2FA for all users
                         </FormDescription>
@@ -81,11 +86,13 @@ export default function SystemSettingsPage() {
                 />
                 <FormField
                   control={form.control}
-                  name="strongPasswords"
+                  name='strongPasswords'
                   render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between space-x-2 rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <FormLabel className="text-base">Password Policy</FormLabel>
+                    <FormItem className='flex flex-row items-center justify-between space-x-2 rounded-lg border p-4'>
+                      <div className='space-y-0.5'>
+                        <FormLabel className='text-base'>
+                          Password Policy
+                        </FormLabel>
                         <FormDescription>
                           Require strong passwords
                         </FormDescription>
@@ -109,27 +116,27 @@ export default function SystemSettingsPage() {
                   Configure email settings for notifications.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className='space-y-4'>
                 <FormField
                   control={form.control}
-                  name="smtpServer"
+                  name='smtpServer'
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>SMTP Server</FormLabel>
                       <FormControl>
-                        <Input placeholder="smtp.example.com" {...field} />
+                        <Input placeholder='smtp.example.com' {...field} />
                       </FormControl>
                     </FormItem>
                   )}
                 />
                 <FormField
                   control={form.control}
-                  name="smtpPort"
+                  name='smtpPort'
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>SMTP Port</FormLabel>
                       <FormControl>
-                        <Input placeholder="587" {...field} />
+                        <Input placeholder='587' {...field} />
                       </FormControl>
                     </FormItem>
                   )}
@@ -137,7 +144,7 @@ export default function SystemSettingsPage() {
               </CardContent>
             </Card>
           </div>
-          <Button type="submit">Save All Settings</Button>
+          <Button type='submit'>Save All Settings</Button>
         </form>
       </Form>
     </div>

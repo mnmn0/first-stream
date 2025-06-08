@@ -1,6 +1,6 @@
-import type { NextAuthOptions } from 'next-auth';
+import type {NextAuthOptions} from 'next-auth';
 import GitHubProvider from 'next-auth/providers/github';
-import { prisma } from '@/lib/prisma';
+import {prisma} from '@/lib/prisma';
 
 export const options: NextAuthOptions = {
   session: { strategy: 'jwt' },
@@ -33,7 +33,7 @@ export const options: NextAuthOptions = {
     jwt: async ({ token, user, account }) => {
       if (user) {
         const dbUser = await prisma.user.findUnique({
-          where: { email: user.email! },
+          where: {email: user.email ?? ''},
           select: { id: true, isAdmin: true },
         });
         if (dbUser) {

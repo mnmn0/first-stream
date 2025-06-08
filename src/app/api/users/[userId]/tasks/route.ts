@@ -1,11 +1,11 @@
-import {NextRequest, NextResponse} from 'next/server';
+import {type NextRequest, NextResponse} from 'next/server';
 import {getServerSession} from 'next-auth';
 import {options} from '@/app/options';
 import {prisma} from '@/lib/prisma';
 
 export async function GET(
   req: NextRequest,
-  {params}: { params: Promise<{ userId: string }> }
+  {params}: { params: Promise<{ userId: string }> },
 ) {
   try {
     const session = await getServerSession(options);
@@ -39,7 +39,7 @@ export async function GET(
     console.error('Failed to fetch user tasks:', error);
     return NextResponse.json(
       {error: 'Failed to fetch user tasks'},
-      {status: 500}
+      {status: 500},
     );
   }
 }

@@ -5,7 +5,7 @@ import {options} from '@/app/options';
 
 export async function PATCH(
   request: Request,
-  {params}: { params: Promise<{ userId: string }> }
+  {params}: { params: Promise<{ userId: string }> },
 ) {
   try {
     const session = await getServerSession(options);
@@ -23,7 +23,7 @@ export async function PATCH(
     if (!currentUser?.isAdmin) {
       return NextResponse.json(
         { error: 'Insufficient permissions' },
-        { status: 403 }
+        {status: 403},
       );
     }
 
@@ -52,7 +52,7 @@ export async function PATCH(
     console.error('Error updating user:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
-      { status: 500 }
+      {status: 500},
     );
   }
 }

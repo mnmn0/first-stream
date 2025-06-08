@@ -17,9 +17,7 @@ export const useProject = (projectId?: string) => {
     error,
     isLoading,
     mutate,
-  } = http.get<Project>(
-    projectId ? `/api/projects/${projectId}` : null
-  );
+  } = http.get<Project>(projectId ? `/api/projects/${projectId}` : null);
 
   return {
     // 単一プロジェクトの取得
