@@ -2,9 +2,9 @@
 
 import {CreateProjectButton} from '@/app/_components/CreateProjectButton';
 import CreateProjectModal, {type CreateProjectModalProps,} from '@/app/_components/CreateProjectModal';
-import {NavigationTabs, type TabItem} from "@/app/_components/NavigationTabs";
+import {NavigationTabs, type TabItem} from '@/app/_components/NavigationTabs';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
-import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover";
+import {Popover, PopoverContent, PopoverTrigger,} from '@/components/ui/popover';
 import {
   Sidebar,
   SidebarContent,
@@ -17,7 +17,7 @@ import {
   SidebarMenuItem,
   SidebarMenuSkeleton,
 } from '@/components/ui/sidebar';
-import {Tooltip, TooltipContent, TooltipTrigger} from '@/components/ui/tooltip';
+import {Tooltip, TooltipContent, TooltipTrigger,} from '@/components/ui/tooltip';
 import {useProject} from '@/hooks/use-project';
 import {useUser} from '@/hooks/use-user';
 import {FolderKanban, LogOut, Shield, Users} from 'lucide-react';
@@ -44,8 +44,16 @@ const AppSidebar: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<TabItem>(navigationTabs[0]);
   const router = useRouter();
   const pathname = usePathname();
-  const { data: userData, isLoading: isLoadingUsers, error: userError } = useUser().users;
-  const {projects: projectData, projectsLoading: isLoadingProjects, projectsError: projectError} = useProject();
+  const {
+    data: userData,
+    isLoading: isLoadingUsers,
+    error: userError,
+  } = useUser().users;
+  const {
+    projects: projectData,
+    projectsLoading: isLoadingProjects,
+    projectsError: projectError,
+  } = useProject();
   const { data: currentUser } = useUser().currentUser;
 
   // 管理者画面のパスの場合はサイドバーを表示しない
@@ -81,13 +89,16 @@ const AppSidebar: React.FC = () => {
     if (selectedTab.id === 'person') {
       if (isLoadingUsers) {
         return Array.from({length: 5}, (_, i) => (
-          <SidebarMenuSkeleton key={`user-skeleton-${i}-${Date.now()}`} showIcon/>
+          <SidebarMenuSkeleton
+            key={`user-skeleton-${i}-${Date.now()}`}
+            showIcon
+          />
         ));
       }
 
       if (userError) {
         return (
-          <div className="px-2 py-4 text-sm text-destructive">
+          <div className='px-2 py-4 text-sm text-destructive'>
             Error loading users
           </div>
         );
@@ -101,17 +112,23 @@ const AppSidebar: React.FC = () => {
                 asChild
                 isActive={pathname === `/person/${user.id}`}
               >
-                <button type="button" onClick={() => handleUserClick(user.id)}
-                        className="flex w-full items-center gap-2">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={user.imageUrl ?? undefined} alt={user.name} />
+                <button
+                  type='button'
+                  onClick={() => handleUserClick(user.id)}
+                  className='flex w-full items-center gap-2'
+                >
+                  <Avatar className='h-8 w-8'>
+                    <AvatarImage
+                      src={user.imageUrl ?? undefined}
+                      alt={user.name}
+                    />
                     <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <span>{user.name}</span>
                 </button>
               </SidebarMenuButton>
             </TooltipTrigger>
-            <TooltipContent side="right">
+            <TooltipContent side='right'>
               <p>View {user.name}'s profile</p>
             </TooltipContent>
           </Tooltip>
@@ -122,13 +139,16 @@ const AppSidebar: React.FC = () => {
     if (selectedTab.id === 'projects') {
       if (isLoadingProjects) {
         return Array.from({length: 5}, (_, i) => (
-          <SidebarMenuSkeleton key={`project-skeleton-${i}-${Date.now()}`} showIcon/>
+          <SidebarMenuSkeleton
+            key={`project-skeleton-${i}-${Date.now()}`}
+            showIcon
+          />
         ));
       }
 
       if (projectError) {
         return (
-          <div className="px-2 py-4 text-sm text-destructive">
+          <div className='px-2 py-4 text-sm text-destructive'>
             Error loading projects
           </div>
         );
@@ -142,14 +162,17 @@ const AppSidebar: React.FC = () => {
                 asChild
                 isActive={pathname === `/project/${project.id}`}
               >
-                <button type="button" onClick={() => handleProjectClick(project.id)}
-                        className="flex w-full items-center gap-2">
-                  <FolderKanban className="h-4 w-4" />
+                <button
+                  type='button'
+                  onClick={() => handleProjectClick(project.id)}
+                  className='flex w-full items-center gap-2'
+                >
+                  <FolderKanban className='h-4 w-4'/>
                   <span>{project.name}</span>
                 </button>
               </SidebarMenuButton>
             </TooltipTrigger>
-            <TooltipContent side="right">
+            <TooltipContent side='right'>
               <p>View project: {project.name}</p>
             </TooltipContent>
           </Tooltip>
@@ -160,7 +183,7 @@ const AppSidebar: React.FC = () => {
 
   return (
     <>
-      <Sidebar className="min-w-[240px]">
+      <Sidebar className='min-w-[240px]'>
         <SidebarContent>
           <NavigationTabs
             tabs={navigationTabs}
@@ -168,9 +191,7 @@ const AppSidebar: React.FC = () => {
             onTabChange={handleTabChange}
           />
           <SidebarGroup>
-            <SidebarGroupLabel>
-              {selectedTab.label}
-            </SidebarGroupLabel>
+            <SidebarGroupLabel>{selectedTab.label}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {selectedTab.id === 'projects' && (
@@ -193,13 +214,13 @@ const AppSidebar: React.FC = () => {
                           asChild
                           isActive={pathname === '/admin/users'}
                         >
-                          <a href="/admin/users">
-                            <Shield className="h-4 w-4" />
+                          <a href='/admin/users'>
+                            <Shield className='h-4 w-4'/>
                             <span>User Management</span>
                           </a>
                         </SidebarMenuButton>
                       </TooltipTrigger>
-                      <TooltipContent side="right">
+                      <TooltipContent side='right'>
                         <p>Manage user access and permissions</p>
                       </TooltipContent>
                     </Tooltip>
@@ -213,7 +234,10 @@ const AppSidebar: React.FC = () => {
           {currentUser && (
             <Popover>
               <PopoverTrigger asChild>
-                <button type="button" className="flex w-full items-center gap-3 px-3 py-2 hover:bg-accent">
+                <button
+                  type='button'
+                  className='flex w-full items-center gap-3 px-3 py-2 hover:bg-accent'
+                >
                   <Avatar>
                     <AvatarImage
                       src={currentUser.imageUrl ?? undefined}
@@ -221,30 +245,34 @@ const AppSidebar: React.FC = () => {
                     />
                     <AvatarFallback>{currentUser.name}</AvatarFallback>
                   </Avatar>
-                  <div className="flex flex-1 flex-col text-left">
-                    <span className="text-sm font-medium">{currentUser.name}</span>
+                  <div className='flex flex-1 flex-col text-left'>
+                    <span className='text-sm font-medium'>
+                      {currentUser.name}
+                    </span>
                     {currentUser.isAdmin && (
-                      <span className="text-xs text-muted-foreground">Administrator</span>
+                      <span className='text-xs text-muted-foreground'>
+                        Administrator
+                      </span>
                     )}
                   </div>
                 </button>
               </PopoverTrigger>
-              <PopoverContent className="w-56" align="start" side="top">
+              <PopoverContent className='w-56' align='start' side='top'>
                 {currentUser?.isAdmin && (
                   <a
-                    href="/admin/users"
-                    className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent"
+                    href='/admin/users'
+                    className='flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent'
                   >
-                    <Shield className="h-4 w-4" />
+                    <Shield className='h-4 w-4'/>
                     <span>ユーザー管理</span>
                   </a>
                 )}
                 <button
-                  type="button"
+                  type='button'
                   onClick={handleSignOut}
-                  className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent"
+                  className='flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent'
                 >
-                  <LogOut className="h-4 w-4" />
+                  <LogOut className='h-4 w-4'/>
                   <span>ログアウト</span>
                 </button>
               </PopoverContent>
